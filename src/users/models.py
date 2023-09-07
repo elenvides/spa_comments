@@ -13,7 +13,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
 
-    role = models.PositiveSmallIntegerField(choices=[(role.value, role.name) for role in Role])
+    role = models.PositiveSmallIntegerField()
 
     objects = UserManager()
 

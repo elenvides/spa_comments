@@ -2,7 +2,8 @@
 
 <template>
   <div id="app">
-    <form @submit.prevent="register">
+    <div v-if="showRegister">
+      <form @submit.prevent="register">
         <div>
           <label for="username">Username:</label>
           <input v-model="username" id="username" name="username">
@@ -21,6 +22,10 @@
         </div>
         <button type="submit">Register</button>
       </form>
+
+      <!-- Btn: show login -->
+      <button class="button-secondary" @click="showLogin = true; showRegister = false">Login</button>
+
       <div v-if="message">
         {{ message }}
       </div>
@@ -31,10 +36,23 @@
           </li>
         </ul>
       </div>
+    </div>
+
+    <!-- Login component -->
+    <div v-if="showLogin">
+      <login-component @loginSuccess="handleLoginSuccess" @close="showLogin = false; showRegister = true" />
+    </div>
+
+    <div v-else-if="showHeader">
+      <header-bar @logout="handleLogout" />
+    </div>
   </div>
 </template>
 
 <script>
+import LoginComponent from './components/Login.vue';
+import HeaderBar from './components/HeaderBar.vue';
+
 export default {
   data() {
     return {
@@ -44,6 +62,9 @@ export default {
       password2: '',
       message: '',
       errors: {},
+      showLogin: false,
+      showRegister: true,
+      showHeader: false,
     };
   },
   methods: {
@@ -73,6 +94,18 @@ export default {
         console.error('An unexpected error happened:', error);
       }
     },
+    handleLoginSuccess() {
+      this.showLogin = false;
+      this.showRegister = false;
+      this.showHeader = true;
+    },
+    handleLogout() {
+      this.showHeader = false;
+    },
+  },
+  components: {
+    LoginComponent,
+    HeaderBar,
   },
 };
 </script>
