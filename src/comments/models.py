@@ -11,11 +11,11 @@ class Comment(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     parent_comment = models.ForeignKey('self', null=True, blank=True, on_delete=models.RESTRICT, related_name='replies')
 
-    image = models.ImageField(upload_to='images/', null=True, blank=True,
+    image = models.ImageField(upload_to='media/images/', null=True, blank=True,
                               validators=[FileExtensionValidator(['jpg', 'jpeg', 'png', 'gif']),
                                           image_size_validator,
                                           validate_image])  # Added validate_image here
-    file = models.FileField(upload_to='files/', null=True, blank=True,
+    file = models.FileField(upload_to='media/files/', null=True, blank=True,
                             validators=[FileExtensionValidator(['txt']),
                                         file_size_validator,
                                         validate_file])  # Added validate_file here
