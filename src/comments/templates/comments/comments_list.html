@@ -8,6 +8,18 @@
 
         <!-- Form (hidden by default) -->
         <div id="commentForm" style="display: none;">
+            {% if form.errors %}
+                <div class="alert alert-danger" role="alert">
+                    Please correct the errors below.
+                    <ul>
+                        {% for field in form %}
+                            {% for error in field.errors %}
+                                <li>{{ error }}</li>
+                            {% endfor %}
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
             <form method="post" enctype="multipart/form-data" class="bg-light p-3 border rounded">
                 {% csrf_token %}
                 <div class="mb-3">
@@ -57,4 +69,3 @@ function toggleReplyForm(commentId) {
 </script>
 
 {% endblock %}
-
