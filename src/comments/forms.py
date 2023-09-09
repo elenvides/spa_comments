@@ -1,7 +1,6 @@
 from django import forms
 from .models import Comment
 from django.utils.translation import gettext_lazy as _
-from .validators import validate_image, validate_file
 
 
 class CommentForm(forms.ModelForm):

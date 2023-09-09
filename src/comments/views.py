@@ -1,6 +1,6 @@
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
-from django.views.generic import ListView, CreateView
+from django.views.generic import ListView
 from .models import Comment
 from .forms import CommentForm
 from django.contrib.auth.decorators import login_required
@@ -15,7 +15,8 @@ class CommentsListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['form'] = CommentForm()
+        if 'form' not in context:
+            context['form'] = CommentForm()
         return context
 
     @method_decorator(login_required(login_url=reverse_lazy('login')))
@@ -35,5 +36,5 @@ class CommentsListView(ListView):
 
     def get(self, request, *args, form=None, **kwargs):
         self.object_list = self.get_queryset()
-        context = self.get_context_data(form=form if form else CommentForm())
+        context = self.get_context_data(object_list=self.object_list, form=form if form else CommentForm())
         return self.render_to_response(context)
