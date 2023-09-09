@@ -1,0 +1,40 @@
+{% with depth=depth|default:0 %}
+<div class="list-group-item" data-depth="{{ depth }}">
+    <div>
+        <strong>{{ comment.user.username }}</strong> ({{ comment.created_at|date:"F d, Y H:i" }})
+    </div>
+    <div>
+        {{ comment.text|safe }}
+    </div>
+    <!-- region reply -->
+    {% if user.is_authenticated %}
+        <button type="button" class="btn btn-link" onclick="toggleReplyForm({{ comment.id }})">Reply</button>
+
+        <!-- Reply form (hidden by default) -->
+        <div id="replyForm{{ comment.id }}" style="display: none;">
+            <form method="post" action="{% url 'comments_list' %}">
+                {% csrf_token %}
+                {{ form.text }}
+                {{ form.image }}
+                {{ form.file }}
+                <input type="hidden" name="parent_comment" value="{{ comment.id }}">
+                <button type="submit" class="btn btn-success btn-sm">Submit</button>
+            </form>
+        </div>
+    {% endif %}
+    <!-- endregion reply -->
+
+    <!-- region display replies -->
+    {% for reply in comment.replies.all %}
+        {% include "comments/_comment.html" with comment=reply depth=depth|add:1 %}
+    {% endfor %}
+    <!-- endregion display replies -->
+</div>
+{% endwith %}
+
+<script>
+    document.querySelectorAll('.list-group-item[data-depth]').forEach(function(item) {
+        let depth = parseInt(item.getAttribute('data-depth'));
+        item.style.marginLeft = (depth * 20) + 'px';
+    });
+</script>

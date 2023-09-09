@@ -13,7 +13,7 @@ COPY Pipfile Pipfile.lock /app/
 
 # install system dependencies
 RUN apt-get update \
-    && apt-get -y install gcc postgresql netcat nodejs npm \
+    && apt-get -y install gcc postgresql netcat \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
@@ -21,11 +21,7 @@ RUN apt-get update \
 RUN pip install --upgrade pip \
     && pip install --upgrade setuptools \
     && pip install pipenv \
-    && pip install watchdog \
     && pipenv sync --dev --system
-
-# install Vue CLI
-RUN npm install -g @vue/cli
 
 # copy rest of the app
 COPY . .
