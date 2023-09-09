@@ -6,6 +6,14 @@
     <div>
         {{ comment.text|safe }}
     </div>
+    <div>
+        {% if comment.image %}
+            <img src="{{ comment.image.url }}" alt="Image for comment by {{ comment.user.username }}" style="max-width: 100%; height: auto;">
+        {% endif %}
+        {% if comment.file %}
+            <a href="{{ comment.file.url }}" target="_blank" download>Download attached file</a>
+        {% endif %}
+    </div>
     <!-- region reply -->
     {% if user.is_authenticated %}
         <button type="button" class="btn btn-link" onclick="toggleReplyForm({{ comment.id }})">Reply</button>
