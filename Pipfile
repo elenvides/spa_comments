@@ -6,7 +6,9 @@ name = "pypi"
 [packages]
 django = "==4.2.5"
 psycopg2-binary = "==2.9.5"
-django-cors-headers = "==4.2.0"
+Pillow = "==10.0.0"
+beautifulsoup4 = "*"
+django-simple-captcha= "*"
 
 [dev-packages]
 pytest-django = "==4.5.2"

@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    {% if user.is_authenticated %}
+        <!-- Button to show/hide the form -->
+        <button type="button" class="btn btn-success mb-3" onclick="toggleForm()">Add New Comment</button>
+
+        <!-- Form (hidden by default) -->
+        <div id="commentForm" style="display: none;">
+            <form method="post" enctype="multipart/form-data" class="bg-light p-3 border rounded">
+                {% csrf_token %}
+                <div class="mb-3">
+                    {{ form.text.label_tag }} {{ form.text }}
+                    <br>
+                    <small class="form-text text-muted">{{ form.text.help_text|safe }}</small>
+                </div>
+                <div class="mb-3">
+                    {{ form.image.label_tag }} {{ form.image }}
+                </div>
+                <div class="mb-3">
+                    {{ form.file.label_tag }} {{ form.file }}
+                </div>
+                <button type="submit" class="btn btn-success">Submit</button>
+            </form>
+        </div>
+    {% else %}
+        <p>You must be logged in to post a comment. <a href="{% url 'login' %}">Login here.</a></p>
+    {% endif %}
+    <div class="list-group">
+        {% for comment in comments %}
+            {% if not comment.parent_comment %}
+                {% include "comments/_comment.html" with comment=comment %}
+            {% endif %}
+        {% endfor %}
+    </div>
+</div>
+
+<script>
+function toggleForm() {
+    const form = document.getElementById("commentForm");
+    if (form.style.display === "none") {
+        form.style.display = "block";
+    } else {
+        form.style.display = "none";
+    }
+}
+
+function toggleReplyForm(commentId) {
+    const form = document.getElementById("replyForm" + commentId);
+    if (form.style.display === "none") {
+        form.style.display = "block";
+    } else {
+        form.style.display = "none";
+    }
+}
+</script>
+
+{% endblock %}
+
