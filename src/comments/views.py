@@ -11,6 +11,7 @@ class CommentsListView(ListView):
     model = Comment
     template_name = 'comments/comments_list.html'
     context_object_name = 'comments'
+    paginate_by = 5
 
     def get_queryset(self):
         # Getting sort params from URL. default: "-created_at" (LIFO)
