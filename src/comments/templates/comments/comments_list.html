@@ -6,7 +6,7 @@
         <!-- Button to show/hide the form -->
         <button type="button" class="btn btn-success mb-3" onclick="toggleForm()">Add New Comment</button>
 
-        <!-- Form (hidden by default) -->
+        <!-- region Form for comments (hidden by default) -->
         <div id="commentForm" style="display: none;">
             {% if form.errors %}
                 <div class="alert alert-danger" role="alert">
@@ -36,9 +36,21 @@
                 <button type="submit" class="btn btn-success">Submit</button>
             </form>
         </div>
+        <!-- endregion Form for comments (hidden by default) -->
     {% else %}
         <p>You must be logged in to post a comment. <a href="{% url 'login' %}">Login here.</a></p>
     {% endif %}
+
+    <!-- region Sorting links -->
+    <div class="mb-3">
+        Sort by:
+        <a href="#" onclick="sort('user__username')">User Name</a> |
+        <a href="#" onclick="sort('user__email')">E-mail</a> |
+        <a href="#" onclick="sort('created_at')">Date</a>
+    </div>
+    <!-- endregion Sorting links -->
+
+    <!-- region Comments list -->
     <div class="list-group">
         {% for comment in comments %}
             {% if not comment.parent_comment %}
@@ -46,26 +58,33 @@
             {% endif %}
         {% endfor %}
     </div>
+    <!-- endregion Comments list -->
 </div>
 
 <script>
-function toggleForm() {
-    const form = document.getElementById("commentForm");
-    if (form.style.display === "none") {
-        form.style.display = "block";
-    } else {
-        form.style.display = "none";
+    function sort(sortBy) {
+        let order = new URLSearchParams(window.location.search).get('order');
+        order = order === 'asc' ? 'desc' : 'asc';
+        window.location.search = new URLSearchParams({sort_by: sortBy, order}).toString();
     }
-}
 
-function toggleReplyForm(commentId) {
-    const form = document.getElementById("replyForm" + commentId);
-    if (form.style.display === "none") {
-        form.style.display = "block";
-    } else {
-        form.style.display = "none";
+    function toggleForm() {
+        const form = document.getElementById("commentForm");
+        if (form.style.display === "none") {
+            form.style.display = "block";
+        } else {
+            form.style.display = "none";
+        }
     }
-}
+
+    function toggleReplyForm(commentId) {
+        const form = document.getElementById("replyForm" + commentId);
+        if (form.style.display === "none") {
+            form.style.display = "block";
+        } else {
+            form.style.display = "none";
+        }
+    }
 </script>
 
 {% endblock %}

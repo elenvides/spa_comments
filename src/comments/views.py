@@ -11,10 +11,29 @@ class CommentsListView(ListView):
     model = Comment
     template_name = 'comments/comments_list.html'
     context_object_name = 'comments'
-    ordering = ['-created_at']
+
+    def get_queryset(self):
+        # Getting sort params from URL. default: "-created_at" (LIFO)
+        sort_by = self.request.GET.get('sort_by', '-created_at')
+        order = self.request.GET.get('order', 'desc')
+
+        # check if sort params
+        if sort_by not in ['user__username', 'user__email', 'created_at']:
+            sort_by = '-created_at'
+
+        # Determine the sorting order
+        if order == 'asc':
+            sort_by = sort_by.lstrip('-')
+        else:
+            sort_by = '-' + sort_by.lstrip('-')
+
+        # Sort main comments using params.
+        return super().get_queryset().filter(parent_comment__isnull=True).order_by(sort_by)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context['sort_by'] = self.request.GET.get('sort_by', '-created_at')
+        context['order'] = self.request.GET.get('order', 'desc')
         if 'form' not in context:
             context['form'] = CommentForm()
         return context
