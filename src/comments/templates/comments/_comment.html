@@ -16,15 +16,23 @@
     </div>
     <!-- region reply -->
     {% if user.is_authenticated %}
-        <button type="button" class="btn btn-link" onclick="toggleReplyForm({{ comment.id }})">Reply</button>
+        <button type="button" class="btn btn-link" onclick="toggleReplyForm('{{ comment.id }}')">Reply</button>
 
         <!-- Reply form (hidden by default) -->
         <div id="replyForm{{ comment.id }}" style="display: none;">
-            <form method="post" action="{% url 'comments_list' %}">
+            <form method="post" action="{% url 'comments_list' %}" enctype="multipart/form-data">
                 {% csrf_token %}
-                {{ form.text }}
-                {{ form.image }}
-                {{ form.file }}
+                <div class="mb-3">
+                    {{ form.text.label_tag }} {{ form.text }}
+                    <br>
+                    <small class="form-text text-muted">{{ form.text.help_text|safe }}</small>
+                </div>
+                <div class="mb-3">
+                    {{ form.image.label_tag }} {{ form.image }}
+                </div>
+                <div class="mb-3">
+                    {{ form.file.label_tag }} {{ form.file }}
+                </div>
                 <input type="hidden" name="parent_comment" value="{{ comment.id }}">
                 <button type="submit" class="btn btn-success btn-sm">Submit</button>
             </form>
