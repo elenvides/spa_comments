@@ -1,31 +1,22 @@
-
 # Run using docker:
 
-`docker-compose up --build`
+## Run
+clone the project
 
+add .env file
 
+run:
 
-# vue_src
+`docker-compose up -d --build`
 
-## Project setup
-```
-npm install
-```
+next time you can use:
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+`docker-compose up -d`
 
-### Compiles and minifies for production
-```
-npm run build
-```
+go to http://localhost:8009/users/login/
 
-### Lints and fixes files
-```
-npm run lint
-```
+The project is in debug mode: Media files are saved inside the project without external services.
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+Pagination works with a few comments for easy testing.
+
+You can find created tables view here: ![db_schema.png](db_schema.png)
